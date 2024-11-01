@@ -12,9 +12,15 @@ then
   usage
 fi
 
+port="$(snapctl get port 2>/dev/null)"
+# Validate it
+if ! expr "$port" : '^[0-9]*$' > /dev/null; then
+    port=5000
+fi
+
 serial=$1
 json=$(jq -n \
   --arg serial "$serial" \
   '{serial: $serial}')
-OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" http://127.0.0.1:5000/query)
+OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" http://127.0.0.1:$port/query)
 echo $OUT

@@ -17,11 +17,17 @@ landscape_id=$2
 landscape_registration_key=$3
 landscape_url=$4
 
+port="$(snapctl get port 2>/dev/null)"
+# Validate it
+if ! expr "$port" : '^[0-9]*$' > /dev/null; then
+    port=5000
+fi
+
 json=$(jq -n \
     --arg serial "$serial" \
     --arg landscape_id "$landscape_id" \
     --arg landscape_registration_key "$landscape_registration_key" \
     --arg landscape_url "$landscape_url" \
     '{($serial): { "landscape-id": $landscape_id, "landscape-registration-key": $landscape_registration_key, "landscape-url": $landscape_url }}')
-OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" http://127.0.0.1:5000/add)
+OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" http://127.0.0.1:$port/add)
 echo $OUT

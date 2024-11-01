@@ -1,0 +1,51 @@
+name: device-lookup-service
+version: git
+summary: Device Lookup Service
+description: A simple web service for storing device configuration
+base: core24
+grade: stable
+confinement: strict
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+
+apps:
+  device-lookup-service:
+    command: bin/flask-run
+    daemon: simple
+    restart-condition: always
+    plugs: [network-bind]
+    environment:
+      FLASK_APP: ./bin/app.py
+      DB_FILE: $SNAP_COMMON/db.json
+      LOG_FILE: $SNAP_COMMON/app.log
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+  add:
+    command: bin/add
+    plugs:
+      - network
+  query:
+    command: bin/query
+    plugs:
+      - network
+
+parts:
+  python-packages:
+    plugin: python
+    source: .
+    python-requirements: ['requirements.txt']
+  device-lookup-service:
+    plugin: dump
+    source: .
+    build-packages:
+      - git
+    stage-packages:
+      - curl
+      - jq
+    organize:
+      flask-run: bin/
+      add: bin/
+      query: bin/
+      app.py: bin/

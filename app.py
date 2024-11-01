@@ -1,12 +1,24 @@
+#!/usr/bin/env python3
+
 from flask import Flask, jsonify, request
+import os
 import json
 import logging
 
+if os.environ.get('LOG_FILE'):
+    logfile=os.environ['LOG_FILE']
+else:
+    logfile='app.log'
+if os.environ.get('DB_FILE'):
+    dbfile=os.environ['DB_FILE']
+else:
+    dbfile='db.json'
+
 # Configure logging
-logging.basicConfig(filename='app.log', level=logging.INFO)
+logging.basicConfig(filename=logfile, level=logging.INFO)
 
 try:
-    with open('db.json', 'r') as f:
+    with open(dbfile, 'r') as f:
         db = json.load(f)
 except:
     db = {}
@@ -19,7 +31,7 @@ def add():
     for item in list(data.keys()):
         logging.info("Adding device %s", item)
         db[item] = data[item]
-    with open('db.json', 'w') as f:
+    with open(dbfile, 'w') as f:
         logging.info("Saving database")
         # Move the file pointer to the beginning
         f.seek(0)
