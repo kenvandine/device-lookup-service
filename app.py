@@ -52,5 +52,10 @@ def query():
 
     return jsonify(db[serial])
 
+@app.route('/', methods=['GET'])
+def index():
+    logging.info("index")
+    return jsonify(db)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
