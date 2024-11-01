@@ -1,0 +1,27 @@
+#!/bin/bash
+# Add configuration values for given serial
+
+usage ()
+{
+  echo "usage: $0 SERIAL LANDSCAPE_ID LANDSCAPE_KEY LANDSCAPE_URL"
+  exit 1
+}
+
+if [ $# -ne 4 ];
+then
+  usage
+fi
+
+serial=$1
+landscape_id=$2
+landscape_registration_key=$3
+landscape_url=$4
+
+json=$(jq -n \
+    --arg serial "$serial" \
+    --arg landscape_id "$landscape_id" \
+    --arg landscape_registration_key "$landscape_registration_key" \
+    --arg landscape_url "$landscape_url" \
+    '{($serial): { "landscape-id": $landscape_id, "landscape-registration-key": $landscape_registration_key, "landscape-url": $landscape_url }}')
+OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" http://127.0.0.1:5000/add)
+echo $OUT

@@ -1,0 +1,12 @@
+[Unit]
+Description=Device Lookup Service
+
+[Service]
+User=ken
+WorkingDirectory=/home/ken/device-lookup-service
+ExecStart=/usr/bin/python3 app.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
