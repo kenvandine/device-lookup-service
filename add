@@ -1,33 +1,38 @@
 #!/bin/bash
-# Add configuration values for given serial
+# Add configuration values for a given device serial
 
 usage ()
 {
-  echo "usage: $0 SERIAL LANDSCAPE_ID LANDSCAPE_KEY LANDSCAPE_URL"
+  echo "usage: $0 SERIAL FILE_PATH"
   exit 1
 }
 
-if [ $# -ne 4 ];
+if [ $# -ne 2 ];
 then
   usage
 fi
 
 serial=$1
-landscape_id=$2
-landscape_registration_key=$3
-landscape_url=$4
+file_path=$2
+
+file_contents=$(cat $file_path)
+echo $file_contents | jq -re 2>1&>/dev/null
+
+if [ $? -ne 0 ];
+then
+  echo "Invalid JSON input"
+  exit 1
+fi
 
 port="$(snapctl get port 2>/dev/null)"
 # Validate it
 if ! expr "$port" : '^[0-9]*$' > /dev/null; then
-    port=5000
+    port=8080
 fi
 
 json=$(jq -n \
     --arg serial "$serial" \
-    --arg landscape_id "$landscape_id" \
-    --arg landscape_registration_key "$landscape_registration_key" \
-    --arg landscape_url "$landscape_url" \
-    '{($serial): { "landscape-id": $landscape_id, "landscape-registration-key": $landscape_registration_key, "landscape-url": $landscape_url }}')
+    --argjson file_contents "$file_contents" \
+    '{($serial): $file_contents}')
 OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" http://127.0.0.1:$port/add)
 echo $OUT
