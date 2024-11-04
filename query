@@ -15,7 +15,7 @@ fi
 port="$(snapctl get port 2>/dev/null)"
 # Validate it
 if ! expr "$port" : '^[0-9]*$' > /dev/null; then
-    port=5000
+    port=8080
 fi
 
 serial=$1
