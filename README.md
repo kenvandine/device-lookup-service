@@ -37,7 +37,7 @@ Supports storing arbitrary key/value configuration as JSON
 
 Retrieve stored autoinstall.yaml for a given device:
 ```
-./autoinstal SERIAL
+./autoinstall SERIAL
 ```
 
 Adding autoinstall.yaml for new device serial
