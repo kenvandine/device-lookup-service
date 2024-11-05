@@ -16,7 +16,7 @@ serial=$1
 file_path=$2
 
 file_contents=$(cat $file_path)
-echo $file_contents | jq -re 2>1&>/dev/null
+echo $file_contents | jq -re 2>&1>/dev/null
 
 if [ $? -ne 0 ];
 then
