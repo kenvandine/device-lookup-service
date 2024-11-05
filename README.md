@@ -9,6 +9,14 @@ as well as autoinstall.yaml data for provisioning.
 python3 app.py
 ```
 
+## Installation
+
+[![Get it from the Snap Store](https://snapcraft.io/en/dark/install.svg)](https://snapcraft.io/device-lookup-service)
+
+```
+sudo snap install device-lookup-service
+```
+
 # Device Configuration
 Supports storing arbitrary key/value configuration as JSON
 
