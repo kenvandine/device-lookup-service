@@ -1,6 +1,24 @@
 #!/bin/bash
 # Query service by serial number for configuration values
 
+if [ -z "${DEVICE_LOOKUP_SERVER}" ];
+then
+  server_url=http://127.0.0.1
+else
+  server_url=${DEVICE_LOOKUP_SERVER}
+fi
+
+if [ -z "${DEVICE_LOOKUP_PORT}" ];
+then
+  port="$(snapctl get port 2>/dev/null)"
+  # Validate it
+  if ! expr "$port" : '^[0-9]*$' > /dev/null; then
+    port=8080
+  fi
+else
+  port=${DEVICE_LOOKUP_PORT}
+fi
+
 usage ()
 {
   echo "usage: $0 SERIAL"
@@ -17,11 +35,5 @@ then
   serial=$1
 fi
 
-port="$(snapctl get port 2>/dev/null)"
-# Validate it
-if ! expr "$port" : '^[0-9]*$' > /dev/null; then
-  port=8080
-fi
-
-OUT=$(curl -s -X GET http://127.0.0.1:$port/autoinstall?serial=$serial)
+OUT=$(curl -s -X GET $server_url:$port/autoinstall?serial=$serial)
 echo $OUT | yq

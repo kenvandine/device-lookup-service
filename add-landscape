@@ -1,6 +1,24 @@
 #!/bin/bash
 # Add landscape configuration values for a given device serial
 
+if [ -z "${DEVICE_LOOKUP_SERVER}" ];
+then
+  server_url=http://127.0.0.1
+else
+  server_url=${DEVICE_LOOKUP_SERVER}
+fi
+
+if [ -z "${DEVICE_LOOKUP_PORT}" ];
+then
+  port="$(snapctl get port 2>/dev/null)"
+  # Validate it
+  if ! expr "$port" : '^[0-9]*$' > /dev/null; then
+    port=8080
+  fi
+else
+  port=${DEVICE_LOOKUP_PORT}
+fi
+
 usage ()
 {
   echo "usage: $0 SERIAL LANDSCAPE_ID LANDSCAPE_KEY LANDSCAPE_URL"
@@ -17,17 +35,11 @@ landscape_id=$2
 landscape_registration_key=$3
 landscape_url=$4
 
-port="$(snapctl get port 2>/dev/null)"
-# Validate it
-if ! expr "$port" : '^[0-9]*$' > /dev/null; then
-    port=8080
-fi
-
 json=$(jq -n \
     --arg serial "$serial" \
     --arg landscape_id "$landscape_id" \
     --arg landscape_registration_key "$landscape_registration_key" \
     --arg landscape_url "$landscape_url" \
     '{($serial): { "landscape-id": $landscape_id, "landscape-registration-key": $landscape_registration_key, "landscape-url": $landscape_url }}')
-OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" http://127.0.0.1:$port/add)
+OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" $server_url:$port/add)
 echo $OUT
