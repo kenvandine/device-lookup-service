@@ -4,6 +4,9 @@ Simple web service for storing and querying for configuration
 based on device serial. Capable of storing configuration values
 as well as autoinstall.yaml data for provisioning.
 
+Device serial is expected to be unique, perhaps the value of chassis serial 
+in dmidecode which can be found in /sys/class/dmi/id/chassis_serial
+
 ## Running the service 
 ```
 python3 app.py
@@ -32,7 +35,7 @@ Query for configuration values for all devices:
 ./query
 ```
 
-Adding record for new device serial
+Adding record for new device serial. You can find a valid configuration at examples/device.json
 ```
 ./add SERIAL INPUT_JSON_FILE
 ```
@@ -48,7 +51,7 @@ Retrieve stored autoinstall.yaml for a given device:
 ./autoinstall SERIAL
 ```
 
-Adding autoinstall.yaml for new device serial
+Adding autoinstall.yaml for new device serial, you can find an valid example at examples/autoinstall.yaml
 ```
 ./add-autoinstall SERIAL AUTOINSTALL_YAML
 ```

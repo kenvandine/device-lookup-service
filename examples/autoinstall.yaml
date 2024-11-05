@@ -1,0 +1,29 @@
+interactive-sections:
+- identity
+- storage
+keyboard:
+  layout: us
+  toggle: null
+  variant: ''
+locale: en_US.UTF-8
+refresh-installer:
+  update: false
+source:
+  id: ubuntu-desktop-minimal
+  search_drivers: false
+codecs:
+  install: true
+drivers:
+  install: true
+storage:
+  layout:
+    name: direct
+    match:
+      size: largest
+ssh:
+  allow-pw: true
+  authorized-keys: []
+  install-server: false
+timezone: America/New_York
+updates: all
+version: 1
