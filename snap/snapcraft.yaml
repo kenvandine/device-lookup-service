@@ -26,6 +26,7 @@ apps:
     command: bin/add
     plugs:
       - network
+      - home
   query:
     command: bin/query
     plugs:
@@ -34,6 +35,7 @@ apps:
     command: bin/add-autoinstall
     plugs:
       - network
+      - home
   autoinstall:
     command: bin/autoinstall
     plugs:
@@ -44,6 +46,7 @@ parts:
     plugin: python
     source: .
     python-requirements: ['requirements.txt']
+
   device-lookup-service:
     plugin: dump
     source: .
@@ -52,6 +55,7 @@ parts:
     stage-packages:
       - curl
       - jq
+    stage-snaps:
       - yq
     organize:
       flask-run: bin/
