@@ -52,11 +52,10 @@ def add():
         f.truncate()
     return jsonify({'Success': 'Added'})
 
-@app.route('/query', methods=['POST'])
+@app.route('/query', methods=['GET'])
 def query():
     logging.info("QUERY")
-    data = request.json
-    serial = data['serial']
+    serial = request.args.get('serial')
     logging.info("Querying for serial: %s", serial)
 
     if not list(db.keys()).count(serial):
