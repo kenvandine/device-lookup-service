@@ -7,20 +7,30 @@ usage ()
   exit 1
 }
 
-if [ $# -ne 1 ];
+if [ $# -gt 0 ];
 then
-  usage
+  if [ $1 == "-h" ];
+  then
+    usage
+    exit
+  fi
+  serial=$1
 fi
 
 port="$(snapctl get port 2>/dev/null)"
 # Validate it
 if ! expr "$port" : '^[0-9]*$' > /dev/null; then
-    port=8080
+  port=8080
 fi
 
-serial=$1
-json=$(jq -n \
-  --arg serial "$serial" \
-  '{serial: $serial}')
-OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" http://127.0.0.1:$port/query)
-echo $OUT
+if [ $serial ];
+then
+  json=$(jq -n \
+    --arg serial "$serial" \
+    '{serial: $serial}')
+  OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" http://127.0.0.1:$port/query)
+else
+  OUT=$(curl -s -X GET -H "Content-Type: application/json" http://127.0.0.1:$port/)
+fi
+
+echo $OUT | jq
