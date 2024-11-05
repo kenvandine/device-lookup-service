@@ -30,6 +30,14 @@ apps:
     command: bin/query
     plugs:
       - network
+  add-autoinstall:
+    command: bin/add-autoinstall
+    plugs:
+      - network
+  autoinstall:
+    command: bin/autoinstall
+    plugs:
+      - network
 
 parts:
   python-packages:
@@ -44,8 +52,11 @@ parts:
     stage-packages:
       - curl
       - jq
+      - yq
     organize:
       flask-run: bin/
       add: bin/
       query: bin/
+      add-autoinstall: bin/
+      autoinstall: bin/
       app.py: bin/
