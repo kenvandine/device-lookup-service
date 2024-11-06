@@ -35,5 +35,5 @@ then
   serial=$1
 fi
 
-OUT=$(curl -s -X GET $server_url:$port/autoinstall?serial=$serial)
+OUT=$(curl -s -X GET $server_url:$port/autoinstall/$serial)
 echo $OUT | yq

@@ -37,9 +37,9 @@ fi
 
 if [ $serial ];
 then
-  OUT=$(curl -s -X GET $server_url:$port/query?serial=$serial)
+  OUT=$(curl -s -X GET $server_url:$port/devices/$serial)
 else
-  OUT=$(curl -s -X GET $server_url:$port/)
+  OUT=$(curl -s -X GET $server_url:$port/devices)
 fi
 
 echo $OUT | jq

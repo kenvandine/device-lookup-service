@@ -46,5 +46,5 @@ json=$(jq -n \
     --arg serial "$serial" \
     --argjson file_contents "$file_contents" \
     '{($serial): $file_contents}')
-OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" $server_url:$port/add)
-echo $OUT
+OUT=$(curl -s -X POST -H "Content-Type: application/json" -d "$json" $server_url:$port/devices)
+echo $OUT | jq
