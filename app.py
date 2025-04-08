@@ -51,7 +51,6 @@ app = Flask(__name__)
 
 @app.route('/bios', methods=['POST'])
 def add_bios():
-    print(request.json)
     if not request.json or len(request.json.keys()) > 1:
         return jsonify({"error": "Bad Request"}), 400
 
@@ -87,7 +86,6 @@ def get_bios(product_name):
 
 @app.route('/devices', methods=['POST'])
 def add_device():
-    print(request.json)
     if not request.json or len(request.json.keys()) > 1:
         return jsonify({"error": "Bad Request"}), 400
 
@@ -123,7 +121,6 @@ def get_device(serial):
 
 @app.route('/autoinstall', methods=['POST'])
 def add_autoinstall():
-    print(request.json)
     if not request.json or len(request.json.keys()) > 1:
         return jsonify({"error": "Bad Request"}), 400
     data = request.json
